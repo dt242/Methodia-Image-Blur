@@ -1,5 +1,4 @@
 import javax.imageio.ImageIO;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,22 +11,26 @@ public class Main {
             int width = image.getWidth();
             int height = image.getHeight();
             BufferedImage outputImage = new BufferedImage(width, height, image.getType());
+            int radius = 2;
+            System.out.println("Radius " + radius);
 
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     int sumR = 0, sumG = 0, sumB = 0;
                     int validPixels = 0;
 
-                    for (int ky = -1; ky <= 1; ky++) {
-                        for (int kx = -1; kx <= 1; kx++) {
+                    for (int ky = -radius; ky <= radius; ky++) {
+                        for (int kx = -radius; kx <= radius; kx++) {
                             int neighborX = x + kx;
                             int neighborY = y + ky;
                             if (neighborX >= 0 && neighborX < width && neighborY >= 0 && neighborY < height) {
                                 int pixelRGB = image.getRGB(neighborX, neighborY);
-                                Color color = new Color(pixelRGB);
-                                sumR += color.getRed();
-                                sumG += color.getGreen();
-                                sumB += color.getBlue();
+                                int r = (pixelRGB >> 16) & 0xFF;
+                                int g = (pixelRGB >> 8) & 0xFF;
+                                int b = pixelRGB & 0xFF;
+                                sumR += r;
+                                sumG += g;
+                                sumB += b;
                                 validPixels++;
                             }
                         }
@@ -36,8 +39,8 @@ public class Main {
                     int avgR = sumR / validPixels;
                     int avgG = sumG / validPixels;
                     int avgB = sumB / validPixels;
-                    Color blurredColor = new Color(avgR, avgG, avgB);
-                    outputImage.setRGB(x, y, blurredColor.getRGB());
+                    int blurredRGB = (255 << 24) | (avgR << 16) | (avgG << 8) | avgB;
+                    outputImage.setRGB(x, y, blurredRGB);
                 }
             }
 

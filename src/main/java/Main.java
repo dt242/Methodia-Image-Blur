@@ -1,5 +1,4 @@
 import javax.imageio.ImageIO;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,19 +8,13 @@ public class Main {
         try {
             File inputFile = new File("test-image.jpg");
             BufferedImage image = ImageIO.read(inputFile);
-            int width = image.getWidth();
-            int height = image.getHeight();
-            System.out.println("Ширина: " + width + " px");
-            System.out.println("Височина: " + height + " px");
-            int pixelRGB = image.getRGB(0, 0);
-            Color color = new Color(pixelRGB);
+            ImageFilter filter = new BoxBlurFilter(2);
+            BufferedImage outputImage = filter.apply(image);
+            File outputFile = new File("blurred-image.jpg");
+            ImageIO.write(outputImage, "jpg", outputFile);
 
-            System.out.println("Пиксел (0,0) цветове:");
-            System.out.println("R: " + color.getRed());
-            System.out.println("G: " + color.getGreen());
-            System.out.println("B: " + color.getBlue());
         } catch (IOException e) {
-            System.out.println("Грешка при зареждане на изображението: " + e.getMessage());
+            System.out.println("Image load error: " + e.getMessage());
         }
     }
 }

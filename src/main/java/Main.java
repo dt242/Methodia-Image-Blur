@@ -8,8 +8,8 @@ public class Main {
         try {
             File inputFile = new File("test-image.jpg");
             BufferedImage image = ImageIO.read(inputFile);
-            ImageFilter boxBlur = new BoxBlurFilter(2);
-            BufferedImage outputImage = boxBlur.apply(image);
+            ImageFilter filter = new BoxBlurFilter(2);
+            BufferedImage outputImage = filter.apply(image);
             File outputFile = new File("blurred-image.jpg");
             ImageIO.write(outputImage, "jpg", outputFile);
 

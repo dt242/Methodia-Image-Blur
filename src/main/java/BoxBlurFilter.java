@@ -1,12 +1,14 @@
 import java.awt.image.BufferedImage;
 
 public class BoxBlurFilter implements ImageFilter {
-    private int radius;
+    private final int radius;
 
     public BoxBlurFilter(int radius) {
+        if (radius < 0) {
+            throw new IllegalArgumentException("Radius must be a positive number!");
+        }
         this.radius = radius;
     }
-
     @Override
     public BufferedImage apply(BufferedImage image) {
         int width = image.getWidth();

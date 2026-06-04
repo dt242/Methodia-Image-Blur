@@ -1,20 +1,26 @@
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
         try {
-            File inputFile = new File("test-image.jpg");
-            BufferedImage image = ImageIO.read(inputFile);
-            ImageFilter filter = new BoxBlurFilter(2);
-            BufferedImage outputImage = filter.apply(image);
-            File outputFile = new File("blurred-image.jpg");
-            ImageIO.write(outputImage, "jpg", outputFile);
+            test("images/input/small.jpg", "images/output/blurred-small.jpg", "jpg");
+            test("images/input/big.jpg", "images/output/blurred-big.jpg", "jpg");
+            test("images/input/small.png", "images/output/blurred-small.png", "png");
+            test("images/input/small-trans.png", "images/output/blurred-small-trans.png", "png");
+            test("images/input/small.avif", "images/output/blurred-from-avif.png", "png");
+            test("images/input/small.webp", "images/output/blurred-from-webp.png", "png");
+            test("images/input/small-trans.webp", "images/output/blurred-from-webp-trans.png", "png");
 
         } catch (IOException e) {
             System.out.println("Image load error: " + e.getMessage());
         }
+    }
+
+    public static void test(String input, String output, String format) throws IOException {
+        BufferedImage image = ImageFileManager.load(input);
+        ImageFilter filter = new BoxBlurFilter(3);
+        BufferedImage resultImage = filter.apply(image);
+        ImageFileManager.save(resultImage, output, format);
     }
 }

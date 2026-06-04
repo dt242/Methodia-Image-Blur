@@ -4,13 +4,13 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         try {
-            test("small.jpg", "blurred-small.jpg", "jpg");
-            test("big.jpg", "blurred-big.jpg", "jpg");
-            test("small.png", "blurred-small.png", "png");
-            test("small-trans.png", "blurred-small-trans.png", "png");
-            test("small.avif", "blurred-from-avif.png", "png");
-            test("small.webp", "blurred-from-webp.png", "png");
-            test("small-trans.webp", "blurred-from-webp-trans.png", "png");
+            test("images/input/small.jpg", "images/output/blurred-small.jpg", "jpg");
+            test("images/input/big.jpg", "images/output/blurred-big.jpg", "jpg");
+            test("images/input/small.png", "images/output/blurred-small.png", "png");
+            test("images/input/small-trans.png", "images/output/blurred-small-trans.png", "png");
+            test("images/input/small.avif", "images/output/blurred-from-avif.png", "png");
+            test("images/input/small.webp", "images/output/blurred-from-webp.png", "png");
+            test("images/input/small-trans.webp", "images/output/blurred-from-webp-trans.png", "png");
 
         } catch (IOException e) {
             System.out.println("Image load error: " + e.getMessage());

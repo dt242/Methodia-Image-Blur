@@ -16,6 +16,9 @@ public class ImageFileManager {
 
     public static void save(BufferedImage image, String filePath, String format) throws IOException {
         File file = new File(filePath);
-        ImageIO.write(image, format, file);
+        boolean success = ImageIO.write(image, format, file);
+        if (!success) {
+            System.out.println("No Writer found for: " + format + ". File not saved!");
+        }
     }
 }

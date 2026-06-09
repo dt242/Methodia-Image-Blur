@@ -1,9 +1,9 @@
 import java.awt.image.BufferedImage;
 
-public class AverageBrightnessBlurFilter implements ImageFilter {
+public class GrayscaleBrightnessBlurFilter implements ImageFilter {
     private final int radius;
 
-    public AverageBrightnessBlurFilter(int radius) {
+    public GrayscaleBrightnessBlurFilter(int radius) {
         if (radius < 0) {
             throw new IllegalArgumentException("Radius must be a positive number!");
         }

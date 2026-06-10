@@ -1,33 +1,42 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 public class FilterFactory {
 
-    private static final Map<String, Function<Map<String, String>, ImageFilter>> registry = new HashMap<>();
+    private static final Map<String, Function<List<String>, ImageFilter>> registry = new HashMap<>();
 
     static {
-        registry.put("box-blur", params -> new BoxBlurFilter(extractRadius(params)));
-        registry.put("grayscale-brightness", params -> new GrayscaleBrightnessBlurFilter(extractRadius(params)));
-        registry.put("color-brightness", params -> new ColorPreservingBrightnessBlurFilter(extractRadius(params)));
+        registry.put("boxblur", params -> new BoxBlurFilter(extractIntStrict(params, 0, "radius")));
+        registry.put("averagebrightnessblur", params -> new GrayscaleBrightnessBlurFilter(extractIntStrict(params, 0, "radius")));
+        registry.put("colorbrightnessblur", params -> new ColorPreservingBrightnessBlurFilter(extractIntStrict(params, 0, "radius")));
     }
 
-    private static int extractRadius(Map<String, String> params) {
-        if (params != null && params.containsKey("radius")) {
-            return Integer.parseInt(params.get("radius"));
+    private static int extractIntStrict(List<String> params, int index, String paramName) {
+        if (params == null || params.size() <= index) {
+            throw new IllegalArgumentException("Missing mandatory parameter '" + paramName + "'!");
         }
-        return 0;
+        try {
+            return Integer.parseInt(params.get(index));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid parameter values '" + paramName + "': " + params.get(index));
+        }
     }
 
-    public static ImageFilter createFilter(String name, Map<String, String> parameters) {
+    public static boolean isFilter(String name) {
+        return registry.containsKey(name.toLowerCase().trim());
+    }
+
+    public static ImageFilter createFilter(String name, List<String> parameters) {
         String filterKey = name.toLowerCase().trim();
-        if (!registry.containsKey(filterKey)) {
+        if (!isFilter(filterKey)) {
             throw new IllegalArgumentException("Unknown filter: " + name);
         }
         return registry.get(filterKey).apply(parameters);
     }
 
-    public static void registerFilter(String name, Function<Map<String, String>, ImageFilter> constructor) {
+    public static void registerFilter(String name, Function<List<String>, ImageFilter> constructor) {
         registry.put(name.toLowerCase().trim(), constructor);
     }
 }

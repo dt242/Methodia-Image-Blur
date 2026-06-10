@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class CropFilter implements ImageFilter {
@@ -21,14 +22,19 @@ public class CropFilter implements ImageFilter {
 
     @Override
     public BufferedImage apply(BufferedImage image) {
-        int actualWidth = Math.min(cropWidth, image.getWidth() - x);
-        int actualHeight = Math.min(cropHeight, image.getHeight() - y);
-        if (actualWidth <= 0 || actualHeight <= 0) {
-            throw new IllegalArgumentException("Crop area is outside the image!");
+        if (x + cropWidth > image.getWidth() || y + cropHeight > image.getHeight()) {
+            throw new IllegalArgumentException("Crop area exceeds the boundaries of the original image!");
         }
-        BufferedImage cropped = image.getSubimage(x, y, actualWidth, actualHeight);
+        BufferedImage cropped = image.getSubimage(x, y, cropWidth, cropHeight);
         BufferedImage copy = new BufferedImage(cropped.getWidth(), cropped.getHeight(), image.getType());
-        copy.getGraphics().drawImage(cropped, 0, 0, null);
+        Graphics2D g2d = copy.createGraphics();
+
+        try {
+            g2d.drawImage(cropped, 0, 0, null);
+        } finally {
+            g2d.dispose();
+        }
+
         return copy;
     }
 }

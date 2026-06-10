@@ -18,8 +18,9 @@ public class Main {
                 image = filter.apply(image);
             }
 
-            String outputPath = "images/output/pipeline-result.jpg";
-            ImageFileManager.save(image, outputPath, "jpg");
+            String extension = imagePath.substring(imagePath.lastIndexOf(".") + 1);
+            String outputPath = "images/output/pipeline-result." + extension;
+            ImageFileManager.save(image, outputPath, extension);
             System.out.println("Successfully applied " + filters.size() + " filters! Result: " + outputPath);
 
         } catch (Exception e) {

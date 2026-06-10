@@ -3,6 +3,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        args = new String[]{"images/input/small.jpg", "crop", "150", "40", "400", "300", "boxblur", "3"};
         if (args.length < 2) {
             System.out.println("Usage: java Main <imagepath> <filter1> [params...] <filter2> [params...]");
             return;

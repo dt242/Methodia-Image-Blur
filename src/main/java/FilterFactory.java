@@ -11,6 +11,12 @@ public class FilterFactory {
         registry.put("boxblur", params -> new BoxBlurFilter(extractIntStrict(params, 0, "radius")));
         registry.put("averagebrightnessblur", params -> new GrayscaleBrightnessBlurFilter(extractIntStrict(params, 0, "radius")));
         registry.put("colorbrightnessblur", params -> new ColorPreservingBrightnessBlurFilter(extractIntStrict(params, 0, "radius")));
+        registry.put("crop", params -> new CropFilter(
+                extractIntStrict(params, 0, "x"),
+                extractIntStrict(params, 1, "y"),
+                extractIntStrict(params, 2, "width"),
+                extractIntStrict(params, 3, "height")
+        ));
     }
 
     private static int extractIntStrict(List<String> params, int index, String paramName) {

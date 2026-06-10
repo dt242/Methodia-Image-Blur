@@ -17,6 +17,7 @@ public class FilterFactory {
                 extractIntStrict(params, 2, "width"),
                 extractIntStrict(params, 3, "height")
         ));
+        registry.put("colorfilter", params -> new ColorFilter(extractStringStrict(params, 0, "color")));
     }
 
     private static int extractIntStrict(List<String> params, int index, String paramName) {
@@ -28,6 +29,13 @@ public class FilterFactory {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid parameter values '" + paramName + "': " + params.get(index));
         }
+    }
+
+    private static String extractStringStrict(List<String> params, int index, String paramName) {
+        if (params == null || params.size() <= index) {
+            throw new IllegalArgumentException("Missing mandatory parameter '" + paramName + "'!");
+        }
+        return params.get(index);
     }
 
     public static boolean isFilter(String name) {

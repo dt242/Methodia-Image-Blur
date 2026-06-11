@@ -2,14 +2,22 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 
 public class ImageFileManager {
 
-    public static BufferedImage load(String filePath) throws IOException {
-        File file = new File(filePath);
-        BufferedImage image = ImageIO.read(file);
+    public static BufferedImage load(String path) throws IOException {
+        BufferedImage image;
+        if (path.toLowerCase().startsWith("http://") || path.toLowerCase().startsWith("https://")) {
+            URL url = URI.create(path).toURL();
+            image = ImageIO.read(url);
+        } else {
+            File file = new File(path);
+            image = ImageIO.read(file);
+        }
         if (image == null) {
-            throw new IOException("Unsupported format: " + filePath);
+            throw new IOException("Unsupported format or cannot read image from: " + path);
         }
         return image;
     }

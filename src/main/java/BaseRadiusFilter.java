@@ -14,35 +14,49 @@ public abstract class BaseRadiusFilter implements ImageFilter {
     public BufferedImage apply(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
-        int type = image.getColorModel().hasAlpha() ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
-        BufferedImage outputImage = new BufferedImage(width, height, type);
+        BufferedImage outputImage = createBlankOutputImage(image, width, height);
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                resetAccumulator();
-
-                for (int ky = -radius; ky <= radius; ky++) {
-                    for (int kx = -radius; kx <= radius; kx++) {
-                        int neighborX = x + kx;
-                        int neighborY = y + ky;
-                        if (ImageUtils.isInside(neighborX, neighborY, width, height)) {
-                            int pixelRGB = image.getRGB(neighborX, neighborY);
-                            int a = (pixelRGB >> 24) & 0xFF;
-                            int r = (pixelRGB >> 16) & 0xFF;
-                            int g = (pixelRGB >> 8) & 0xFF;
-                            int b = pixelRGB & 0xFF;
-                            accumulate(r, g, b, a);
-                        }
-                    }
-                }
-
-                int centerRGB = image.getRGB(x, y);
-                int newRgb = resolvePixel(centerRGB);
+                int newRgb = processSinglePixel(image, x, y, width, height);
                 outputImage.setRGB(x, y, newRgb);
             }
         }
 
         return outputImage;
+    }
+
+    private BufferedImage createBlankOutputImage(BufferedImage image, int width, int height) {
+        int type = image.getColorModel().hasAlpha() ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
+        return new BufferedImage(width, height, type);
+    }
+
+    private int processSinglePixel(BufferedImage image, int x, int y, int width, int height) {
+        resetAccumulator();
+        accumulateNeighbors(image, x, y, width, height);
+        int centerRGB = image.getRGB(x, y);
+        return resolvePixel(centerRGB);
+    }
+
+    private void accumulateNeighbors(BufferedImage image, int x, int y, int width, int height) {
+        for (int ky = -radius; ky <= radius; ky++) {
+            for (int kx = -radius; kx <= radius; kx++) {
+                int neighborX = x + kx;
+                int neighborY = y + ky;
+                if (ImageUtils.isInside(neighborX, neighborY, width, height)) {
+                    extractAndAccumulateColors(image, neighborX, neighborY);
+                }
+            }
+        }
+    }
+
+    private void extractAndAccumulateColors(BufferedImage image, int x, int y) {
+        int pixelRGB = image.getRGB(x, y);
+        int a = (pixelRGB >> 24) & 0xFF;
+        int r = (pixelRGB >> 16) & 0xFF;
+        int g = (pixelRGB >> 8) & 0xFF;
+        int b = pixelRGB & 0xFF;
+        accumulate(r, g, b, a);
     }
 
     protected abstract void resetAccumulator();

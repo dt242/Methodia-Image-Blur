@@ -1,3 +1,7 @@
+import filters.ImageFilter;
+import io.CommandLineParser;
+import io.ImageFileManager;
+
 import java.awt.image.BufferedImage;
 import java.util.List;
 

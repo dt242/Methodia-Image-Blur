@@ -1,3 +1,5 @@
+package filters;
+
 public class GrayscaleBrightnessBlurFilter extends BaseRadiusFilter {
     private long sumA, weightedBrightness;
     private int validPixels;

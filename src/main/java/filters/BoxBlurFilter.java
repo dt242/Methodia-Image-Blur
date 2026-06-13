@@ -1,3 +1,5 @@
+package filters;
+
 public class BoxBlurFilter extends BaseRadiusFilter {
     private long sumA, weightedR, weightedG, weightedB;
     private int validPixels;

@@ -1,3 +1,7 @@
+package filters;
+
+import utils.ImageUtils;
+
 import java.awt.image.BufferedImage;
 
 public abstract class BaseRadiusFilter implements ImageFilter {

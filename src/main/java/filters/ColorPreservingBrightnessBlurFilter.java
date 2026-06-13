@@ -1,3 +1,5 @@
+package filters;
+
 import java.awt.Color;
 
 public class ColorPreservingBrightnessBlurFilter extends BaseRadiusFilter {

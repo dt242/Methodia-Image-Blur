@@ -1,3 +1,8 @@
+package io;
+
+import factory.FilterFactory;
+import filters.ImageFilter;
+
 import java.util.ArrayList;
 import java.util.List;
 

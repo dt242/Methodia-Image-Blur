@@ -1,3 +1,5 @@
+package filters;
+
 import java.awt.image.BufferedImage;
 
 public interface ImageFilter {
